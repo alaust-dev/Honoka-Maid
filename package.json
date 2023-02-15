@@ -1,0 +1,23 @@
+{
+  "name": "honoka-maid",
+  "version": "1.0.0",
+  "description": "A Discord Bot to manage servers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alaust-dev/Honoka-Maid.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alaust-dev/Honoka-Maid/issues"
+  },
+  "homepage": "https://github.com/alaust-dev/Honoka-Maid#readme",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
+}
