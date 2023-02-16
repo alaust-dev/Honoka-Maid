@@ -2,7 +2,8 @@ import * as winston from "winston"
 import * as dotenv from "dotenv"
 import {Client, ActivityType, GatewayIntentBits} from "discord.js";
 import {JoinListener} from "./join-auto-roles/listener/join-listener";
-import {load, loadAsync} from "node-yaml-config";
+import * as yaml from "js-yaml"
+import * as fs from "fs"
 
 
 export const log = winston.createLogger({
@@ -12,7 +13,7 @@ export const log = winston.createLogger({
     ]
 })
 export const client = new Client({intents: [GatewayIntentBits.GuildMembers, GatewayIntentBits.Guilds]})
-export const config = load('config/honoka-config.yml');
+export const config: any = yaml.load(fs.readFileSync('config/honoka-config.yml', "utf-8"))
 
 export class HonokaMaid {
 
