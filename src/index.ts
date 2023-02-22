@@ -4,7 +4,8 @@ import {ActivityType, Client, Events, GatewayIntentBits, REST, Routes} from "dis
 import {JoinListener} from "./join-auto-roles/listener/join-listener";
 import * as yaml from "js-yaml"
 import * as fs from "fs"
-import {SendSelfRoleMessage} from "./self-roles/commands/send-self-role-message";
+import {SendSelfRoleMessageCommand} from "./self-roles/commands/send-self-role-message-command";
+import {HonokaConfig} from "./common/config/honoka-config";
 
 
 export const log = winston.createLogger({
@@ -21,7 +22,7 @@ export const client = new Client({
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildIntegrations]
 })
-export const config: any = yaml.load(fs.readFileSync('config/honoka-config.yml', "utf-8"))
+export const config: HonokaConfig = yaml.load(fs.readFileSync('config/honoka-config.yml', "utf-8")) as HonokaConfig
 
 export class HonokaMaid {
 
@@ -36,10 +37,10 @@ export class HonokaMaid {
             activities: [{name: "your needs", type: ActivityType.Listening}]
         })
         JoinListener.register()
-        SendSelfRoleMessage.register()
+        SendSelfRoleMessageCommand.register()
         client.on(Events.ClientReady, () => {
             const rest = new REST({version: "10"}).setToken(process.env.DISCORD_TOKEN)
-            rest.put(Routes.applicationGuildCommands(client.user.id, "1069569167272980560"), {body: [SendSelfRoleMessage.command()]})
+            rest.put(Routes.applicationGuildCommands(client.user.id, "1069569167272980560"), {body: [SendSelfRoleMessageCommand.command()]})
         })
         log.info("Started up, ready to serve!")
     }
