@@ -1,9 +1,10 @@
 import * as winston from "winston"
 import * as dotenv from "dotenv"
-import {Client, ActivityType, GatewayIntentBits} from "discord.js";
+import {ActivityType, Client, Events, GatewayIntentBits, REST, Routes} from "discord.js";
 import {JoinListener} from "./join-auto-roles/listener/join-listener";
 import * as yaml from "js-yaml"
 import * as fs from "fs"
+import {SendSelfRoleMessage} from "./self-roles/commands/send-self-role-message";
 
 
 export const log = winston.createLogger({
@@ -12,7 +13,14 @@ export const log = winston.createLogger({
         new winston.transports.Console()
     ]
 })
-export const client = new Client({intents: [GatewayIntentBits.GuildMembers, GatewayIntentBits.Guilds]})
+export const client = new Client({
+    intents: [
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildIntegrations]
+})
 export const config: any = yaml.load(fs.readFileSync('config/honoka-config.yml', "utf-8"))
 
 export class HonokaMaid {
@@ -28,6 +36,11 @@ export class HonokaMaid {
             activities: [{name: "your needs", type: ActivityType.Listening}]
         })
         JoinListener.register()
+        SendSelfRoleMessage.register()
+        client.on(Events.ClientReady, () => {
+            const rest = new REST({version: "10"}).setToken(process.env.DISCORD_TOKEN)
+            rest.put(Routes.applicationGuildCommands(client.user.id, "1069569167272980560"), {body: [SendSelfRoleMessage.command()]})
+        })
         log.info("Started up, ready to serve!")
     }
 }
