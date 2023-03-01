@@ -1,4 +1,11 @@
-import {ActionRowBuilder, EmbedBuilder, Events, JSONEncodable, SlashCommandBuilder, StringSelectMenuBuilder} from "discord.js";
+import {
+    ActionRowBuilder,
+    EmbedBuilder,
+    Events,
+    JSONEncodable,
+    SlashCommandBuilder,
+    StringSelectMenuBuilder
+} from "discord.js";
 import {client, config} from "../../index";
 import {RoleUtils} from "../../common/utils/role-utils";
 
@@ -21,14 +28,15 @@ export class SendSelfRoleMessageCommand {
 
             let roleOverview = ""
             for (const role of config.selfRoles) {
-                roleOverview += `🢚 ${RoleUtils.getRoleFromGuildById(interaction.guild, role.roleId).toString()} - ${role.description}\n`
+                const roleMention = RoleUtils.getRoleFromGuildById(interaction.guild, role.roleId).toString()
+                roleOverview += `🢚 ${roleMention} - ${role.description}\n`
             }
 
             const embed = new EmbedBuilder()
                 .setTitle("𝘚𝘦𝘭𝘦𝘤𝘵 𝘵𝘩𝘦 𝘳𝘰𝘭𝘦𝘴 𝘺𝘰𝘶 𝘸𝘪𝘴𝘩 𝘧𝘰𝘳")
                 .setColor("Purple")
-                .setDescription("As a humble maid serving this noble household, I present to you a list of the esteemed Discord roles on this server.\n\n" +
-                    roleOverview)
+                .setDescription("As a humble maid serving this noble household, " +
+                    "I present to you a list of the esteemed Discord roles on this server.\n\n" + roleOverview)
             const selectMenu = new StringSelectMenuBuilder()
                 .setCustomId("self-roles")
                 .setPlaceholder("Nothing selected.")

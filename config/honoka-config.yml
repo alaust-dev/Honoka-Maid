@@ -1,10 +1,11 @@
 joinRoleId: "1075549999234027570"
 selfRoles:
   - label: "Maker- / Hackerspace"
-    description: "Gain access to the technologie related topics."
+    description: "Gain access to the technologies related topics."
     emoji: "⌨️"
     value: "coding-space"
     roleId: "1069602135936864258"
+
   - label: "Game Room"
     description: "Gain access to the games related topics."
     emoji: "👾"

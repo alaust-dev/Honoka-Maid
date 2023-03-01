@@ -1,4 +1,4 @@
-import {Guild, Role} from "discord.js";
+import {Guild, GuildMember, Role, User} from "discord.js";
 
 export class RoleUtils {
 
