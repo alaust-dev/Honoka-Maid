@@ -1,4 +1,4 @@
-import {ActionRowBuilder, EmbedBuilder, Events, SlashCommandBuilder, StringSelectMenuBuilder} from "discord.js";
+import {ActionRowBuilder, EmbedBuilder, Events, JSONEncodable, SlashCommandBuilder, StringSelectMenuBuilder} from "discord.js";
 import {client, config} from "../../index";
 import {RoleUtils} from "../../common/utils/role-utils";
 
@@ -19,14 +19,21 @@ export class SendSelfRoleMessageCommand {
                 return
             }
 
+            let roleOverview = ""
+            for (const role of config.selfRoles) {
+                roleOverview += `🢚 ${RoleUtils.getRoleFromGuildById(interaction.guild, role.roleId).toString()} - ${role.description}\n`
+            }
+
             const embed = new EmbedBuilder()
                 .setTitle("𝘚𝘦𝘭𝘦𝘤𝘵 𝘵𝘩𝘦 𝘳𝘰𝘭𝘦𝘴 𝘺𝘰𝘶 𝘸𝘪𝘴𝘩 𝘧𝘰𝘳")
                 .setColor("Purple")
                 .setDescription("As a humble maid serving this noble household, I present to you a list of the esteemed Discord roles on this server.\n\n" +
-                    "-> " + RoleUtils.getRoleFromGuildById(interaction.guild, "1069602135936864258").toString())
+                    roleOverview)
             const selectMenu = new StringSelectMenuBuilder()
                 .setCustomId("self-roles")
                 .setPlaceholder("Nothing selected.")
+                .setMinValues(0)
+                .setMaxValues(config.selfRoles.length)
 
             for (const role of config.selfRoles) {
                 selectMenu.addOptions({
@@ -40,8 +47,8 @@ export class SendSelfRoleMessageCommand {
             const row = new ActionRowBuilder()
                 .addComponents(selectMenu)
 
-            //@ts-ignore
-            interaction.channel.send({embeds: [embed], components: [row]})
+
+            interaction.channel.send({embeds: [embed], components: [row as JSONEncodable<any>]})
             interaction.reply({ephemeral: true, content: "Message sent."})
         })
     }
